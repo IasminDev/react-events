@@ -1,29 +1,7 @@
 import { InputRegister } from './input-create'
-import { api } from '../lib/server'
-import {useEffect, useState } from "react"
 
-interface Event{
-    title: string
-    details: string | null
-    maximumAttendees: number | null
-}
 export function CreateNewEvent(){
     
-    const [title, setTitle] = useState('')
-    const [details, setDetails] = useState('')
-    const [maximumAttendees, setMaximumAttendees] = useState('')
-
-    useEffect(() => {
-    api.post('/events', {
-        title,
-        details,
-        maximumAttendees
-    })
-    .then(function(){
-        console.log(response)
-    })
-    })
-
     return(
         <div className='flex flex-col gap-4'>
             <div className="flex gap-3 items-center">
