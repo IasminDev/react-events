@@ -1,12 +1,6 @@
 import { InputRegister } from './input-create'
 import { api } from '../lib/server'
-import {useEffect, useState } from "react"
-
-interface Attendee{
-    name: string
-    email: string
-    eventId: string
-}
+import { useState } from "react"
 
 export function RegisterNewAttendee(){
 
@@ -15,7 +9,7 @@ export function RegisterNewAttendee(){
     const [eventId, setEventId] = useState('')
     const [registerError, setRegisterError] = useState('')
 
-    const handleRegister = () => {
+    const handleAttendeeRegister = () => {
         api.post(`/events/${eventId}/attendees`, {
             eventId,
             name,
@@ -56,7 +50,7 @@ export function RegisterNewAttendee(){
                 />
                 <div>
                 <button className='bg-orange-400 border border-white/10 rounded-md p-2 text-sm text-zinc-900 hover:bg-orange-500'
-                        onClick={handleRegister}>
+                        onClick={handleAttendeeRegister}>
                     Seed
                 </button>   
                 </div>           

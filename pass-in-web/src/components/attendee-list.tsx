@@ -5,12 +5,15 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 //import 'dayjs/locale/pt-br'
 import { IconButton } from './icon-button'
+import { InputRegister } from './input-create'
 import { Table } from './table/table'
 import { TableHeader } from './table/table-header'
 import { TableCell } from './table/table-cell'
 import { TableRow } from './table/table-row'
 import { ChangeEvent, useEffect, useState } from 'react'
 // import { attendees } from '../data/attendees'
+
+import { api } from '../lib/server'
 
 dayjs.extend(relativeTime)
 //dayjs.locale('pt-br')
@@ -41,27 +44,48 @@ export function AttendeeList(){
     })
 
     const [attendees, setAttendees] = useState<Attendee[]>([])
-
+    const [eventId, setEventId] = useState('')
     const [total, setTotal] = useState(0)
     const totalPages = Math.ceil(total/10)
     
     useEffect(() => {
+        if(eventId){
+            api.get(`/events/${eventId}/attendees`, {
+                params:{
+                page,
+                search
+            }}
+            )
+            .then(function(response){
+                return response.data
+            })
+            .then(data => {
+                setAttendees(data.attendees)
+                setTotal(data.total)
+            })
+            .catch(function(error){
+                console.log(`Error showing attendee: ${error.response.data.message}`)
+            })
+    // const url = new URL('http://localhost:3333/events/0e349644-78f8-45c7-8481-d740d35a9c44/attendees')
 
-        const url = new URL('http://localhost:3333/events/0e349644-78f8-45c7-8481-d740d35a9c44/attendees')
+    // url.searchParams.set('pageIndex', String(page-1))
+    // if(search.length > 0){
+    //     url.searchParams.set('query', search)
+    // }
 
-        url.searchParams.set('pageIndex', String(page-1))
-        if(search.length > 0){
-            url.searchParams.set('query', search)
+    // fetch(url)
+    // .then(response => response.json())
+    // .then(data => {
+    //     console.log(data)
+    //     setAttendees(data.attendees)
+    //     setTotal(data.total)
+    // })
         }
-
-        fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            setAttendees(data.attendees)
-            setTotal(data.total)
-        })
-    }, [page, search])
+        else {
+            setAttendees([]);
+            setTotal(0);
+        }
+    }, [eventId, page, search])
 
     function setCurrentSearch(search: string){
         const url = new URL(window.location.toString())
@@ -106,6 +130,13 @@ export function AttendeeList(){
         <div className='flex flex-col gap-4'>
             <div className="flex gap-3 items-center">
                 <h1 className="text-2xl font-bold ">Participants</h1>
+                <InputRegister 
+                    id='eventId'
+                    placeholder="Insert event id..."
+                    value={eventId}
+                    onChange={(e) => setEventId(e.target.value)}
+                />
+            </div>
                 <div className="py-3 px-1.5 w-72 border border-white/10 rounded-lg flex items-center gap-3">
                     <Search className='size-4 text-emerald-300'/>
                     <input 
@@ -116,7 +147,6 @@ export function AttendeeList(){
                         placeholder="Search participant..."
                     />
                 </div>
-            </div>
             <Table>
                 <thead>
                     <tr className='border-b border-white/10'>
@@ -132,7 +162,9 @@ export function AttendeeList(){
                 </thead>
                 <tbody>
                     {/* slice((page-1)*10, page * 10). */}
-                    {attendees.map((attendee) => {
+                    {attendees
+                    .filter(attendee => attendee.name.toLowerCase().includes(search.toLowerCase()))
+                    .map((attendee) => {
                         return(
                             <TableRow key={attendee.id}>
                                 <TableCell>

@@ -10,6 +10,8 @@ export function Header(){
             <NavLink href="/participants">Participants</NavLink>
             <NavLink href="/create-event">Create Event</NavLink>
             <NavLink href="/register-attendee">Register Attendee</NavLink>
+            <NavLink href="/update-event">Update Event</NavLink>
+            <NavLink href="/update-attendee">Update Attendee</NavLink>
         </nav>
     </div>
     )
