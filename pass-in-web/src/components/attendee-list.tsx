@@ -52,10 +52,10 @@ export function AttendeeList(){
         if(eventId){
             api.get(`/events/${eventId}/attendees`, {
                 params:{
-                page,
-                search
-            }}
-            )
+                    page: page - 1,
+                    search
+                }
+            })
             .then(function(response){
                 return response.data
             })
@@ -66,20 +66,6 @@ export function AttendeeList(){
             .catch(function(error){
                 console.log(`Error showing attendee: ${error.response.data.message}`)
             })
-    // const url = new URL('http://localhost:3333/events/0e349644-78f8-45c7-8481-d740d35a9c44/attendees')
-
-    // url.searchParams.set('pageIndex', String(page-1))
-    // if(search.length > 0){
-    //     url.searchParams.set('query', search)
-    // }
-
-    // fetch(url)
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log(data)
-    //     setAttendees(data.attendees)
-    //     setTotal(data.total)
-    // })
         }
         else {
             setAttendees([]);
@@ -105,25 +91,20 @@ export function AttendeeList(){
         setCurrentSearch(event.target.value)
         setCurrentPage(1)
     }
-
     function goToNextPage(){
-        // setPage(page + 1)
-        setCurrentPage(page + 1)
+        setCurrentPage(page + 1);
     }
-
+    
     function goToPreviousPage(){
-        // setPage(page - 1)
-        setCurrentPage(page - 1)
+        setCurrentPage(page - 1);
     }
-
+    
     function goToFirstPage(){
-        // setPage(1)
-        setCurrentPage(1)
+        setCurrentPage(1);
     }
-
+    
     function goToLastPage(){
-        // setPage(totalPages)
-        setCurrentPage(totalPages)
+        setCurrentPage(totalPages);
     }
 
     return(
@@ -229,3 +210,17 @@ export function AttendeeList(){
         </div>
     )
 }
+    // const url = new URL('http://localhost:3333/events/0e349644-78f8-45c7-8481-d740d35a9c44/attendees')
+
+    // url.searchParams.set('pageIndex', String(page-1))
+    // if(search.length > 0){
+    //     url.searchParams.set('query', search)
+    // }
+
+    // fetch(url)
+    // .then(response => response.json())
+    // .then(data => {
+    //     console.log(data)
+    //     setAttendees(data.attendees)
+    //     setTotal(data.total)
+    // })

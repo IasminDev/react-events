@@ -1,11 +1,13 @@
 import { Header } from "./components/header";
-import { UpdateEventData } from "./components/update-event-data";
+import { CheckIn } from "./components/check-in";
+import { UpdateAttendeeData } from "./components/update-attendee-data";
 
 export function UpdateAttendee() {
   return(
     <div className="max-w-[1216px] mx-auto py-5 flex flex-col gap-5">
       <Header/>
-      <UpdateEventData/>
+      <CheckIn/>
+      <UpdateAttendeeData/>
     </div>
   ) 
 }
