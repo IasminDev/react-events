@@ -54,20 +54,16 @@ export function AttendeeList(){
             setLoading(true)
             api.get(`/events/${eventId}/attendees`, {
                 params:{
-                    page,
-                    search
+                    pageIndex: page-1,
+                    query: search
                 }
             })
             .then(function(response){
-                console.log(response.data)
-                return response.data
-            })
-            .then(data => {
-                console.log(data.attendees)
-                setAttendees(data.attendees)
-                setTotal(data.total)
-                setTotalPages(Math.ceil(data.total/10))
-                setLoading(false)
+                const data = response.data;
+                setAttendees(data.attendees);
+                setTotal(data.total);
+                setTotalPages(Math.ceil(data.total / 10));
+                setLoading(false);
             })
             .catch(function(error){
                 console.log(`Error showing attendee: ${error.response.data.message}`)
@@ -75,18 +71,13 @@ export function AttendeeList(){
             })
         }
         else {
-            setAttendees([])
-            setTotal(0)
-            setTotalPages(1)
-            setPage(1)
-            setCurrentPage(1)
-        }
-        if (total > 0) {
-            setTotalPages(Math.ceil(total / 10));
-        } else {
+            setAttendees([]);
+            setTotal(0);
             setTotalPages(1);
+            setPage(1);
+            setCurrentPage(1);
         }
-    }, [eventId])
+    }, [eventId, page, search])
 
     function setCurrentSearch(search: string){
         const url = new URL(window.location.toString())

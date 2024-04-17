@@ -112,7 +112,7 @@ export function UpdateAttendeeData(){
                         {loading ? "Searching..." : "Search"}
                 </button>  
                 {attendeeData && (
-                <div className={`${flexDisplay} flex-col gap-4 items-center`}>
+                <div className='flex flex-col gap-4 items-center'>
                     <InputRegister
                             id='email'
                             placeholder="Email..."
