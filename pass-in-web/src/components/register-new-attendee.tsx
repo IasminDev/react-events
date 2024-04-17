@@ -8,6 +8,7 @@ export function RegisterNewAttendee(){
     const [email, setEmail] = useState('')
     const [eventId, setEventId] = useState('')
     const [registerError, setRegisterError] = useState('')
+    const [registerInfo, setRegisterInfo] = useState('')
 
     const handleAttendeeRegister = () => {
         api.post(`/events/${eventId}/attendees`, {
@@ -18,8 +19,16 @@ export function RegisterNewAttendee(){
         .then(function(response){
             console.log(response)
             setRegisterError('')
+            setRegisterInfo('New participant successfully registered')
+            setTimeout(() => {
+                setRegisterInfo('')
+                setEventId('')
+                setName('')
+                setEmail('')
+            }, 3000)
         })
         .catch(function(error){
+            setRegisterInfo('')
             setRegisterError(`Error registering attendee: ${error.response.data.message}`)
         })
     }
@@ -51,11 +60,11 @@ export function RegisterNewAttendee(){
                 <div>
                 <button className='bg-orange-400 border border-white/10 rounded-md p-2 text-sm text-zinc-900 hover:bg-orange-500'
                         onClick={handleAttendeeRegister}>
-                    Seed
+                    Register
                 </button>   
                 </div>           
-                <div className="py-3 px-1.5 w-80 rounded-lg flex items-center gap-3">
-                <span className='text-center'>{registerError}</span>
+                <div>
+                <span className='text-center'>{registerError}{registerInfo}</span>
                 </div>  
             </div>  
         </div>    

@@ -15,5 +15,4 @@ npm i @faker-js/faker -D
 npm i @types/react -D
 npm i @types/react-dom -D
 npm i eslint -D
-npm i @typescript-eslint -D
 npm i autoprefixer -D

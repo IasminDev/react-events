@@ -96,7 +96,8 @@ export function EventList(){
                         placeholder="Search event..."
                     />
                 </div>
-            </div>
+            </div>            
+            {events.length > 0 ? (
             <Table>            
             <thead>
                 <tr className='border-b border-white/10'>
@@ -169,6 +170,9 @@ export function EventList(){
                 </tr>
             </tfoot>
             </Table>
+            ) : (
+                <p className="text-gray-500">No events found.</p>
+            )}
         </div>
     )
 }

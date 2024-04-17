@@ -1,4 +1,4 @@
-export function CheckIn(){
+export function RealizeCheckIn(){
     return(        
         <div className='flex flex-col gap-4'>
             <div className="flex gap-3 items-center">
