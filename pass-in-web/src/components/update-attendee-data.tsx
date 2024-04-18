@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { InputRegister } from "./input-create";
 import { api } from "../lib/server";
+import { Table } from "./table/table";
+import { TableCell } from "./table/table-cell";
+import { TableRow } from "./table/table-row";
+import dayjs from "dayjs";
+import { TableHeader } from "./table/table-header";
 
 interface Attendee{
     id: string
@@ -24,16 +29,16 @@ export function UpdateAttendeeData(){
 
     const searchAttendee = () => {
         setLoading(true)
-        api.get(`/events/${eventId}/attendees?search=${attendeeId}`)
+        api.get(`/events/${eventId}/attendees/${attendeeId}`)
        .then((response) => {
-            const data = response.data
-            console.log(response.data)
-            if(data && data.length > 0){
-                setAttendeeData(data[0])
-                setName(data[0].name)
-                setEmail(data[0].email)
-                setCreatedAt(data[0].createdAt)
-                setCheckedInAt(data[0].checkedInAt ?? "")
+            const data = response.data.attendees
+            console.log(data)
+            if(data){
+                setAttendeeData(data)
+                setName(data.name)
+                setEmail(data.email)
+                setCreatedAt(data.createdAt)
+                setCheckedInAt(data.checkedInAt)
                 setRegisterInfo("")
             }else{
                 setAttendeeData(null)
@@ -59,7 +64,6 @@ export function UpdateAttendeeData(){
                 name: name,
                 email: email,
                 createdAt: createdAt,
-                checkedInAt: checkedInAt,
             }
             api.put(`/events/${eventId}/attendees/${attendeeData.id}`, updatedData)
            .then((response) => {
@@ -71,7 +75,6 @@ export function UpdateAttendeeData(){
                     setName('')
                     setEmail('')
                     setCreatedAt('')
-                    setCheckedInAt('')
                 }, 3000)
             })
             .catch((error) => {
@@ -95,6 +98,7 @@ export function UpdateAttendeeData(){
                 <h1 className="text-2xl font-bold ">Update a attendee</h1>
             </div>
             <div className="flex flex-col gap-4 items-center">
+                
                 <InputRegister 
                         id='eventId'
                         placeholder="Event id..."
@@ -112,13 +116,46 @@ export function UpdateAttendeeData(){
                         {loading ? "Searching..." : "Search"}
                 </button>  
                 {attendeeData && (
-                <div className='flex flex-col gap-4 items-center'>
-                    <InputRegister
-                            id='email'
-                            placeholder="Email..."
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                    />
+                <div>
+
+                    <Table>
+                    <thead>
+                        <tr className='border-b border-white/10'>
+                            <TableHeader>Code</TableHeader>
+                            <TableHeader>Participant</TableHeader>
+                            <TableHeader>Email</TableHeader>
+                            <TableHeader>Date of inscription</TableHeader>
+                            <TableHeader>Date of check-in</TableHeader>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <TableRow key={attendeeId}>
+                            <TableCell>
+                                {attendeeId}
+                            </TableCell>
+                            <TableCell>
+                                <span>
+                                    {name}
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                <span>
+                                    {email.toLocaleLowerCase()}
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                {dayjs().to(createdAt)}
+                            </TableCell>
+                            <TableCell>
+                                {checkedInAt === null 
+                                ? <span className="text-zinc-400">Still not checked</span>
+                                : dayjs().to(checkedInAt)}                                    
+                            </TableCell>   
+                        </TableRow>      
+                    </tbody>                       
+                    </Table>
+                <div className='flex flex-col gap-4 items-center py-4'>
+                    <div className='flex flex-row gap-4 items-center'>
                     <InputRegister
                             id='name'
                             placeholder="Name..."
@@ -126,24 +163,26 @@ export function UpdateAttendeeData(){
                             onChange={(e) => setName(e.target.value)}
                     />
                     <InputRegister
+                            id='email'
+                            placeholder="Email..."
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <InputRegister
                             id='createdAt'
                             placeholder="Created date..."
                             value={createdAt}
                             onChange={(e) => setCreatedAt(e.target.value)}
                     />
-                    <InputRegister
-                            id='checkedInAt'
-                            placeholder="Check in..."
-                            value={checkedInAt}
-                            onChange={(e) => setCheckedInAt(e.target.value)}
-                    />
-                    <div>
+                    </div>
+                    <div className='flex flex-col gap-4 items-center'>
                     <button className='bg-orange-400 border border-white/10 rounded-md p-2 text-sm text-zinc-900 hover:bg-orange-500'
                             onClick={updateAttendeeData}
                             disabled={loading}>
                             {loading ? "Updating..." : "Update"}
                     </button>   
                     </div>           
+                </div>
                 </div>
                 )}
                 <div>
