@@ -4,8 +4,8 @@ import { api } from "../lib/server";
 import { Table } from "./table/table";
 import { TableCell } from "./table/table-cell";
 import { TableRow } from "./table/table-row";
-import dayjs from "dayjs";
 import { TableHeader } from "./table/table-header";
+import dayjs from "dayjs";
 
 interface Attendee{
     id: string
@@ -63,7 +63,6 @@ export function UpdateAttendeeData(){
             const updatedData = {
                 name: name,
                 email: email,
-                createdAt: createdAt,
             }
             api.put(`/events/${eventId}/attendees/${attendeeData.id}`, updatedData)
            .then((response) => {
@@ -72,9 +71,9 @@ export function UpdateAttendeeData(){
                 setTimeout(() => {
                     setRegisterInfo('')
                     setEventId('')
+                    setAttendeeId('')
                     setName('')
                     setEmail('')
-                    setCreatedAt('')
                 }, 3000)
             })
             .catch((error) => {
@@ -167,12 +166,6 @@ export function UpdateAttendeeData(){
                             placeholder="Email..."
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <InputRegister
-                            id='createdAt'
-                            placeholder="Created date..."
-                            value={createdAt}
-                            onChange={(e) => setCreatedAt(e.target.value)}
                     />
                     </div>
                     <div className='flex flex-col gap-4 items-center'>
