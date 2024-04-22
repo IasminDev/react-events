@@ -17,29 +17,31 @@ interface Attendee{
 }
 
 export function UpdateAttendeeData(){
-    const [eventId, setEventId] = useState('');
+    const [eventId, setEventId] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [createdAt, setCreatedAt] = useState('')
     const [checkedInAt, setCheckedInAt] = useState('')
-    const [attendeeId, setAttendeeId] = useState('');
-    const [attendeeData, setAttendeeData] = useState<Attendee | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [attendeeId, setAttendeeId] = useState('')
+    const [attendeeData, setAttendeeData] = useState<Attendee | null>(null)
+    const [loadingUpdate, setLoadingUpdate] = useState(false)
+    const [loadingSearch, setLoadingSearch] = useState(false)
     const [registerInfo, setRegisterInfo] = useState('')
+    const [showTable, setShowTable] = useState(false)
 
     const searchAttendee = () => {
-        setLoading(true)
+        setLoadingSearch(true)
         api.get(`/events/${eventId}/attendees/${attendeeId}`)
        .then((response) => {
             const data = response.data.attendees
-            console.log(data)
             if(data){
                 setAttendeeData(data)
                 setName(data.name)
                 setEmail(data.email)
                 setCreatedAt(data.createdAt)
                 setCheckedInAt(data.checkedInAt)
-                setRegisterInfo("")
+                setRegisterInfo('')
+                setShowTable(true)
             }else{
                 setAttendeeData(null)
                 setName('')
@@ -47,18 +49,20 @@ export function UpdateAttendeeData(){
                 setCreatedAt('')
                 setCheckedInAt('')
                 setRegisterInfo("Attendee not found")
+                setShowTable(false)
             }
         })
         .catch((error) => {
             console.error(`Error searching attendee: ${error}`)
             setRegisterInfo("Error searching attendee")
+            setLoadingSearch(false)
         })
         .finally(() => {
-            setLoading(false)
+            setLoadingSearch(false)
         })
     }
     const updateAttendeeData = () => {
-        setLoading(true)
+        setLoadingUpdate(true)
         if (attendeeData) {
             const updatedData = {
                 name: name,
@@ -66,7 +70,6 @@ export function UpdateAttendeeData(){
             }
             api.put(`/events/${eventId}/attendees/${attendeeData.id}`, updatedData)
            .then((response) => {
-                console.log(response.data)
                 setRegisterInfo("Successfully updated")
                 setTimeout(() => {
                     setRegisterInfo('')
@@ -74,6 +77,7 @@ export function UpdateAttendeeData(){
                     setAttendeeId('')
                     setName('')
                     setEmail('')
+                    setShowTable(false)
                 }, 3000)
             })
             .catch((error) => {
@@ -81,12 +85,12 @@ export function UpdateAttendeeData(){
                 setRegisterInfo("Error updating attendee")
             })
             .finally(() => {
-                setLoading(false)
+                setLoadingUpdate(false)
             })
         }
         else{
             setRegisterInfo('Attendee not found')   
-            setLoading(false)     
+            setLoadingUpdate(false)     
         }
     }
 
@@ -111,10 +115,11 @@ export function UpdateAttendeeData(){
                         onChange={(e) => setAttendeeId(e.target.value)}
                 />
                 <button className='bg-orange-400 border border-white/10 rounded-md p-2 text-sm text-zinc-900 hover:bg-orange-500'
-                        onClick={searchAttendee}>
-                        {loading ? "Searching..." : "Search"}
+                        onClick={searchAttendee}
+                        disabled={loadingSearch || loadingUpdate}>
+                        {loadingSearch ? "Searching..." : "Search"}
                 </button>  
-                {attendeeData && (
+                {showTable && attendeeData && (
                 <div>
 
                     <Table>
@@ -171,8 +176,8 @@ export function UpdateAttendeeData(){
                     <div className='flex flex-col gap-4 items-center'>
                     <button className='bg-orange-400 border border-white/10 rounded-md p-2 text-sm text-zinc-900 hover:bg-orange-500'
                             onClick={updateAttendeeData}
-                            disabled={loading}>
-                            {loading ? "Updating..." : "Update"}
+                            disabled={loadingSearch || loadingUpdate}>
+                            {loadingUpdate ? "Updating..." : "Update"}
                     </button>   
                     </div>           
                 </div>
