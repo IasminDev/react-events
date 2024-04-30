@@ -69,7 +69,7 @@ export function UpdateAttendeeData(){
                 email: email,
             }
             api.put(`/events/${eventId}/attendees/${attendeeData.id}`, updatedData)
-           .then((response) => {
+           .then(() => {
                 setRegisterInfo("Successfully updated")
                 setTimeout(() => {
                     setRegisterInfo('')

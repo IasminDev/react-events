@@ -1,0 +1,13 @@
+{
+    "routes": [
+      { "src": "/", "dest": "/" },
+      { "src": "/events", "dest": "/" },
+      { "src": "/participants", "dest": "/" },
+      { "src": "/create-event", "dest": "/" },
+      { "src": "/register-attendee", "dest": "/" },
+      { "src": "/update-event", "dest": "/" },
+      { "src": "/update-attendee", "dest": "/" },
+      { "src": "/delete-event", "dest": "/" },
+      { "src": "/delete-attendee", "dest": "/" }   
+    ]
+}
