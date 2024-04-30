@@ -7,7 +7,6 @@ export function RegisterNewAttendee(){
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [eventId, setEventId] = useState('')
-    const [registerError, setRegisterError] = useState('')
     const [registerInfo, setRegisterInfo] = useState('')
 
     const handleAttendeeRegister = () => {
@@ -18,18 +17,16 @@ export function RegisterNewAttendee(){
         })
         .then(function(response){
             console.log(response)
-            setRegisterError('')
             setRegisterInfo('New participant successfully registered')
             setTimeout(() => {
                 setRegisterInfo('')
                 setEventId('')
                 setName('')
                 setEmail('')
-            }, 3000)
+            }, 2000)
         })
         .catch(function(error){
-            setRegisterInfo('')
-            setRegisterError(`Error registering attendee: ${error.response.data.message}`)
+            setRegisterInfo(`Error registering attendee: ${error.response.data.message}`)
         })
     }
 
@@ -64,7 +61,7 @@ export function RegisterNewAttendee(){
                 </button>   
                 </div>           
                 <div>
-                <span className='text-center'>{registerError}{registerInfo}</span>
+                <span className='text-center'>{registerInfo}</span>
                 </div>  
             </div>  
         </div>    
