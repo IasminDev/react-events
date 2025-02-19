@@ -1,6 +1,6 @@
-# React Events  
+# Events  
 
-This repository contains a React project focused on handling events and interactivity in web applications. The backend for this project is available in the [node-events](https://github.com/IasminDev/node-events) repository.  
+This repository contains a React project focused on handling events and interactivity in web applications. The backend for this project is available in the [events_back](https://github.com/IasminDev/events_back) repository.  
 
 ## Features  
 
@@ -31,7 +31,7 @@ This repository contains a React project focused on handling events and interact
    ```bash
    npm install
    ```
-4. Start the backend server (see [node-events](https://github.com/IasminDev/node-events) for setup instructions).  
+4. Start the backend server (see [events_back](https://github.com/IasminDev/events_back) for setup instructions).  
 5. Start the frontend development server:  
    ```bash
    npm run dev
